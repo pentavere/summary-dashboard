@@ -36,9 +36,9 @@ const PatientHeader = () => {
     );
   }
   return (
-          <div className="w-full rounded-lg p-6 mb-6 bg-cyan-900">
+          <div className="w-full rounded-lg p-6 mb-6 bg-green-900">
             <div className="flex items-center gap-8 flex-nowrap">
-              <div className="rounded-full p-2 flex-shrink-0 bg-cyan-800">
+              <div className="rounded-full p-2 flex-shrink-0 bg-green-800">
                 <User className="w-6 h-6 text-white" />
               </div>
               <div className="flex-shrink-0">

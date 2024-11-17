@@ -35,10 +35,10 @@ const Button = ({ variant = 'default', className, children, ...props }) => (
 const NotificationPopup = ({ message, onClose, variant = 'default', onPrevious, onNext, showNavigation }) => {
   if (variant === 'source') {
     return (
-      <div className="flex items-center justify-between gap-4 px-4 py-2 bg-cyan-50 text-cyan-800 text-sm font-medium rounded-lg shadow-sm border border-cyan-200 animate-fadeIn">
+      <div className="flex items-center justify-between gap-4 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn">
         <Button
           variant="outline"
-          className="text-cyan-800 border-cyan-800 hover:bg-cyan-100"
+          className="text-green-800 border-green-800 hover:bg-green-100"
           onClick={onPrevious}
           disabled={!showNavigation}
         >
@@ -48,7 +48,7 @@ const NotificationPopup = ({ message, onClose, variant = 'default', onPrevious, 
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="text-cyan-800 border-cyan-800 hover:bg-cyan-100"
+            className="text-green-800 border-green-800 hover:bg-green-100"
             onClick={onNext}
             disabled={!showNavigation}
           >
@@ -56,7 +56,7 @@ const NotificationPopup = ({ message, onClose, variant = 'default', onPrevious, 
           </Button>
           <button
             onClick={onClose}
-            className="text-cyan-800 hover:text-cyan-900"
+            className="text-green-800 hover:text-green-900"
           >
             <X className="w-4 h-4" />
           </button>
@@ -66,11 +66,11 @@ const NotificationPopup = ({ message, onClose, variant = 'default', onPrevious, 
   }
 
   return (
-    <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 text-cyan-800 text-sm font-medium rounded-lg shadow-sm border border-cyan-200 animate-fadeIn w-fit">
+    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn w-fit">
       {message}
       <button
         onClick={onClose}
-        className="text-cyan-800 hover:text-cyan-900 flex-shrink-0"
+        className="text-green-800 hover:text-green-900 flex-shrink-0"
       >
         <X className="w-4 h-4" />
       </button>
@@ -155,7 +155,7 @@ const SummaryDashboard = ({documents, sections}) => {
               mb-2
               last:mb-0
               ${selectedItem === item 
-                ? 'bg-cyan-50 font-medium' 
+                ? 'bg-green-50 font-medium' 
                 : 'hover:bg-gray-100'}
             `}
             role="button"
@@ -231,7 +231,7 @@ const SummaryDashboard = ({documents, sections}) => {
                     <button
                       className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 ${
                         activeTab === 'processed' 
-                          ? 'border-cyan-800 text-cyan-800' 
+                          ? 'border-green-800 text-green-800' 
                           : 'border-transparent text-gray-500'
                       }`}
                       onClick={() => setActiveTab('processed')}
@@ -241,7 +241,7 @@ const SummaryDashboard = ({documents, sections}) => {
                     <button
                       className={`px-6 py-3 font-medium text-sm transition-colors border-b-2 ${
                         activeTab === 'source' 
-                          ? 'border-cyan-800 text-cyan-800' 
+                          ? 'border-green-800 text-green-800' 
                           : 'border-transparent text-gray-500'
                       }`}
                       onClick={() => setActiveTab('source')}
@@ -279,7 +279,7 @@ const SummaryDashboard = ({documents, sections}) => {
                                   border-t 
                                   transition-colors
                                   ${selectedItem && selectedItem.doc_ids?.includes(doc.id)
-                                    ? 'bg-cyan-50 hover:bg-cyan-100 cursor-pointer'
+                                    ? 'bg-green-50 hover:bg-green-100 cursor-pointer'
                                     : selectedItem 
                                       ? 'opacity-50' 
                                       : 'hover:bg-gray-50'
@@ -298,7 +298,7 @@ const SummaryDashboard = ({documents, sections}) => {
                         <div className="flex justify-end mt-4">
                           <Button 
                             variant="outline" 
-                            className="text-cyan-800 border-cyan-800 hover:bg-cyan-50"
+                            className="text-green-800 border-green-800 hover:bg-green-50"
                           >
                             Modify Documents
                           </Button>
