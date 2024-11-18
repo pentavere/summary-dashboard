@@ -32,51 +32,47 @@ const Button = ({ variant = 'default', className, children, ...props }) => (
   </button>
 );
 
-const NotificationPopup = ({ message, onClose, variant = 'default', onPrevious, onNext, showNavigation }) => {
-  if (variant === 'source') {
-    return (
-      <div className="flex items-center justify-between gap-4 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn">
-        <Button
-          variant="outline"
-          className="text-green-800 border-green-800 hover:bg-green-100"
-          onClick={onPrevious}
-          disabled={!showNavigation}
-        >
-          Previous
-        </Button>
-        <span>{message}</span>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className="text-green-800 border-green-800 hover:bg-green-100"
-            onClick={onNext}
-            disabled={!showNavigation}
-          >
-            Next
-          </Button>
-          <button
-            onClick={onClose}
-            className="text-green-800 hover:text-green-900"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-    );
-  }
+const ProcessedNotification = ({ message, onClose }) => (
+  <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn w-fit">
+    {message}
+    <button
+      onClick={onClose}
+      className="text-green-800 hover:text-green-900 flex-shrink-0"
+    >
+      <X className="w-4 h-4" />
+    </button>
+  </div>
+);
 
-  return (
-    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn w-fit">
-      {message}
+const SourceNotification = ({ message, onClose, onPrevious, onNext, showNavigation }) => (
+  <div className="flex items-center justify-between gap-4 px-4 py-2 bg-green-50 text-green-800 text-sm font-medium rounded-lg shadow-sm border border-green-200 animate-fadeIn">
+    <Button
+      variant="outline"
+      className="text-green-800 border-green-800 hover:bg-green-100"
+      onClick={onPrevious}
+      disabled={!showNavigation}
+    >
+      Previous
+    </Button>
+    <span>{message}</span>
+    <div className="flex items-center gap-2">
+      <Button
+        variant="outline"
+        className="text-green-800 border-green-800 hover:bg-green-100"
+        onClick={onNext}
+        disabled={!showNavigation}
+      >
+        Next
+      </Button>
       <button
         onClick={onClose}
-        className="text-green-800 hover:text-green-900 flex-shrink-0"
+        className="text-green-800 hover:text-green-900"
       >
         <X className="w-4 h-4" />
       </button>
     </div>
-  );
-};
+  </div>
+);
 
 const SummaryDashboard = ({documents, sections}) => {
   const [expandedSections, setExpandedSections] = useState({
@@ -88,6 +84,7 @@ const SummaryDashboard = ({documents, sections}) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [activeTab, setActiveTab] = useState('processed');
   const [relatedDocuments, setRelatedDocuments] = useState([]);
+  const [activeReferenceIndex, setActiveReferenceIndex] = useState(0);
   const [activeDocumentIndex, setActiveDocumentIndex] = useState(0);
 
   const toggleSection = (section) => {
@@ -101,38 +98,38 @@ const SummaryDashboard = ({documents, sections}) => {
     if (selectedItem === item) {
       setSelectedItem(null);
       setRelatedDocuments([]);
-      setActiveDocumentIndex(0);
+      setActiveReferenceIndex(0);
     } else {
       setSelectedItem(item);
-      const related = documents.filter(doc => 
-        item.doc_ids && item.doc_ids.includes(doc.id)
-      );
+      const docIds = [...new Set(item.references.map(ref => ref.doc_id))];
+      const related = documents.filter(doc => docIds.includes(doc.id));
       setRelatedDocuments(related);
-      setActiveDocumentIndex(0);
+      setActiveReferenceIndex(0);
     }
   };
 
-  const handleDocumentClick = (docIndex) => {
+  const handleDocumentClick = (docId) => {
+    const startingRefIndex = selectedItem.references.findIndex(ref => ref.doc_id === docId);
+    setActiveReferenceIndex(startingRefIndex);
     setActiveTab('source');
-    setActiveDocumentIndex(docIndex);
   };
 
-  const clearSelection = () => {
-    setSelectedItem(null);
-    setRelatedDocuments([]);
-    setActiveDocumentIndex(0);
-  };
-
-  const handlePreviousDocument = () => {
-    setActiveDocumentIndex(prev => 
+  const handlePreviousReference = () => {
+    setActiveReferenceIndex(prev => 
       prev > 0 ? prev - 1 : prev
     );
   };
 
-  const handleNextDocument = () => {
-    setActiveDocumentIndex(prev => 
-      prev < relatedDocuments.length - 1 ? prev + 1 : prev
+  const handleNextReference = () => {
+    setActiveReferenceIndex(prev => 
+      prev < selectedItem.references.length - 1 ? prev + 1 : prev
     );
+  };
+  
+  const clearSelection = () => {
+    setSelectedItem(null);
+    setRelatedDocuments([]);
+    setActiveDocumentIndex(0);
   };
 
   const renderSectionContent = (sections) => {
@@ -266,35 +263,37 @@ const SummaryDashboard = ({documents, sections}) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {documents.map((doc, index) => (
-                              <tr 
-                                key={index}
-                                onClick={() => {
-                                  if (selectedItem && selectedItem.doc_ids?.includes(doc.id)) {
-                                    const docIndex = relatedDocuments.findIndex(relDoc => relDoc.id === doc.id);
-                                    handleDocumentClick(docIndex);
-                                  }
-                                }}
-                                className={`
-                                  border-t 
-                                  transition-colors
-                                  ${selectedItem && selectedItem.doc_ids?.includes(doc.id)
-                                    ? 'bg-green-50 hover:bg-green-100 cursor-pointer'
-                                    : selectedItem 
-                                      ? 'opacity-50' 
-                                      : 'hover:bg-gray-50'
-                                  }
-                                `}
-                              >
+              {documents.map((doc, index) => {
+                const isRelated = selectedItem?.references.some(ref => ref.doc_id === doc.id);
+                return (
+                  <tr 
+                    key={index}
+                    onClick={() => {
+                      if (isRelated) {
+                        handleDocumentClick(doc.id);
+                      }
+                    }}
+                    className={`
+                      border-t 
+                      transition-colors
+                      ${isRelated
+                        ? 'bg-green-50 hover:bg-green-100 cursor-pointer'
+                        : selectedItem 
+                          ? 'opacity-50' 
+                          : 'hover:bg-gray-50'
+                      }
+                    `}
+                  >
                                 <td className="py-3 text-sm">{doc.title}</td>
                                 <td className="py-3 text-sm">{doc.category}</td>
                                 <td className="py-3 text-sm">{doc.author}</td>
                                 <td className="py-3 text-sm">{doc.date}</td>
                                 <td className="py-3 text-sm">{doc.performer}</td>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                            );
+                          })}
+                        </tbody>
+                      </table>
                         <div className="flex justify-end mt-4">
                           <Button 
                             variant="outline" 
@@ -306,39 +305,34 @@ const SummaryDashboard = ({documents, sections}) => {
                       </div>
 
                       <div className="flex-shrink-0 p-4 border-t bg-white">
-                        <div className="flex justify-center">
-                          {selectedItem && relatedDocuments.length > 0 && (
-                            <NotificationPopup
-                              message={`Showing ${relatedDocuments.length} document${relatedDocuments.length !== 1 ? 's' : ''} related to: ${selectedItem.value}`}
-                              onClose={clearSelection}
-                              variant="doclist"
-                              onPrevious={handlePreviousDocument}
-                              onNext={handleNextDocument}
-                              showNavigation={relatedDocuments.length > 1}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col flex-grow min-h-0">
-                      <div className="flex-grow overflow-auto p-4">
-                        <p className="text-gray-500">Source documents will be displayed here</p>
-                      </div>
-                      <div className="flex-shrink-0 p-4 border-t bg-white">
-                        {selectedItem && relatedDocuments.length > 0 && (
-                          <NotificationPopup
-                            message={`Document ${activeDocumentIndex + 1} of ${relatedDocuments.length}`}
-                            onClose={clearSelection}
-                            variant="source"
-                            onPrevious={handlePreviousDocument}
-                            onNext={handleNextDocument}
-                            showNavigation={relatedDocuments.length > 1}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  )}
+          <div className="flex justify-center">
+            {selectedItem && relatedDocuments.length > 0 && (
+              <ProcessedNotification
+              message={`Showing ${relatedDocuments.length} document${relatedDocuments.length !== 1 ? 's' : ''} related to: ${selectedItem.value}`}
+              onClose={clearSelection}
+            />
+            )}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="flex flex-col flex-grow min-h-0">
+        <div className="flex-grow overflow-auto p-4">
+          <p className="text-gray-500">Source documents will be displayed here</p>
+        </div>
+        <div className="flex-shrink-0 p-4 border-t bg-white">
+          {selectedItem && selectedItem.references.length > 0 && (
+            <SourceNotification
+            message={`Reference ${activeReferenceIndex + 1} of ${selectedItem.references.length}`}
+            onClose={clearSelection}
+            onPrevious={handlePreviousReference}
+            onNext={handleNextReference}
+            showNavigation={selectedItem.references.length > 1}
+          />
+          )}
+        </div>
+      </div>
+    )}
                 </div>
               </Card>
             </div>
