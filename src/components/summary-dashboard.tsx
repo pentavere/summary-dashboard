@@ -85,7 +85,6 @@ const SummaryDashboard = ({documents, sections}) => {
   const [activeTab, setActiveTab] = useState('processed');
   const [relatedDocuments, setRelatedDocuments] = useState([]);
   const [activeReferenceIndex, setActiveReferenceIndex] = useState(0);
-  const [activeDocumentIndex, setActiveDocumentIndex] = useState(0);
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
@@ -129,7 +128,6 @@ const SummaryDashboard = ({documents, sections}) => {
   const clearSelection = () => {
     setSelectedItem(null);
     setRelatedDocuments([]);
-    setActiveDocumentIndex(0);
   };
 
   const renderSectionContent = (sections) => {
