@@ -9,7 +9,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 // Add this utility function at the top of your file
 const getPublicPath = (path) => {
   const basePath = process.env.NODE_ENV === 'production' 
-    ? '/your-repo-name' // Replace with your repository name
+    ? '/summary-dashboard' // Replace with your repository name
     : '';
   return `${basePath}${path}`;
 };
