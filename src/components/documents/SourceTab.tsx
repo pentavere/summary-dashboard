@@ -62,7 +62,6 @@ const SourceTab = ({
   onNextReference,
   documents
 }) => {
-  const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1);
   const [pdfDimensions, setPdfDimensions] = useState({ width: 0, height: 0 });
@@ -151,8 +150,7 @@ const SourceTab = ({
     }
   }, [currentReference]);
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
+  const onDocumentLoadSuccess = ({ }) => {
     setError(null);
     setIsLoading(false);
   };
