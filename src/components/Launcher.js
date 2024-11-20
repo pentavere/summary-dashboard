@@ -9,13 +9,11 @@ class LauncherBase extends React.Component {
     static contextType = FhirClientContext;
 
     componentDidMount() {
-        if (this.props.app) {
-            this.onChangeProvider({
-                target: { 
-                    value: `cerner-provider-${this.props.app}`
-                }
-            }, this.context);
-        }
+        this.onChangeProvider({
+            target: { 
+                value: `cerner-provider-${this.props.app}`
+            }
+        }, this.context);
     }
 
     onChangeProvider(event, context) {
@@ -24,9 +22,10 @@ class LauncherBase extends React.Component {
 
         const secret_client_id = "REACT_APP_CLIENT_ID_" + providerKey;
 
-        if (secret_client_id in process.env) {
-            fhirconfig.client_id = process.env[secret_client_id];
-        }
+        console.log(process.env)
+        //if (secret_client_id in process.env) {
+        fhirconfig.client_id = "1988a4c1-60f3-42cb-85a1-8ce4fb88e981" //process.env[secret_client_id];
+        //}
 
         const options = {
             clientId: fhirconfig.client_id,
@@ -59,18 +58,7 @@ class LauncherBase extends React.Component {
 
 // Wrapper component to use Next.js navigation
 const Launcher = () => {
-    const params = useParams();
-    const searchParams = useSearchParams();
-    
-    // Get app from dynamic route parameter
-    const app = params?.app;
-
-    // Optional: Handle case where app parameter is missing
-    if (!app) {
-        return <div>Missing app parameter</div>;
-    }
-
-    return <LauncherBase app={app} />;
+    return <LauncherBase app="distillery" />;
 };
 
 export default Launcher;
