@@ -6,6 +6,14 @@ import SourceNotification from '@/components/notifications/SourceNotification';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
+// Add this utility function at the top of your file
+const getPublicPath = (path) => {
+  const basePath = process.env.NODE_ENV === 'production' 
+    ? '/your-repo-name' // Replace with your repository name
+    : '';
+  return `${basePath}${path}`;
+};
+
 const HighlightOverlay = ({ boundingBox, scale = 1 }) => {
   const { x, y, width, height } = boundingBox;
   
@@ -88,13 +96,18 @@ const SourceTab = ({
       }
 
       try {
+        // Handle URL based on whether it's external or local
         const pdfUrl = currentDocument.url.startsWith('http') 
           ? currentDocument.url 
-          : currentDocument.url;
+          : getPublicPath(currentDocument.url);
+
+        console.log('Loading PDF from:', pdfUrl); // Debug log
 
         if (!currentDocument.url.startsWith('http')) {
           const response = await fetch(pdfUrl);
-          if (!response.ok) throw new Error('Failed to load PDF');
+          if (!response.ok) {
+            throw new Error(`Failed to load PDF: ${response.status} ${response.statusText}`);
+          }
           const blob = await response.blob();
           setPdfFile(blob);
         } else {
