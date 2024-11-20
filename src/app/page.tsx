@@ -1,3 +1,4 @@
+"use client";
 import SummaryDashboard from '@/components/pages/SummaryDashboard'
 import FhirClientProvider from "@/components/FhirClientProvider";
 import { useState, useEffect } from 'react';

@@ -1,3 +1,4 @@
+"use client";
 import SummaryDashboard from "@/components/pages/SummaryDashboard";
 import { useState, useEffect } from 'react';
 
