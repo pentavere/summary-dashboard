@@ -20,12 +20,11 @@ class LauncherBase extends React.Component {
         const providerKey = event.target.value;
         const fhirconfig = config[event.target.value];
 
-        const secret_client_id = "REACT_APP_CLIENT_ID_" + providerKey;
+        const secret_client_id = "NEXT_PUBLIC_CLIENT_ID" + providerKey;
 
-        console.log(process.env)
-        //if (secret_client_id in process.env) {
-        fhirconfig.client_id = "1988a4c1-60f3-42cb-85a1-8ce4fb88e981" //process.env[secret_client_id];
-        //}
+        // if ("NEXT_PUBLIC_CLIENT_ID" in process.env) {
+        fhirconfig.client_id = process.env["NEXT_PUBLIC_CLIENT_ID"];
+        // }
 
         const options = {
             clientId: fhirconfig.client_id,
