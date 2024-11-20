@@ -4,13 +4,6 @@ import FhirClientProvider from "@/components/FhirClientProvider";
 import { useState, useEffect } from 'react';
 
 
-// export default function YourApp() {
-//   return (
-//       <FhirClientProvider>
-//          <SummaryDashboard documents={documents} sections={sections} />
-//       </FhirClientProvider>
-//   );
-// }
 export default function Home() {
   const [testData, setData] = useState(null);
 
@@ -24,7 +17,9 @@ export default function Home() {
     if (!testData) return <div>Loading...</div>;
   return (
     <main>
+      <FhirClientProvider>
           <SummaryDashboard documents={testData.documents} sections={testData.sections} />
+      </FhirClientProvider>
     </main>
   )
 }

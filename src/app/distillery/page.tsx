@@ -1,5 +1,6 @@
 "use client";
 import SummaryDashboard from "@/components/pages/SummaryDashboard";
+import FhirClientProvider from "@/components/FhirClientProvider";
 import { useState, useEffect } from 'react';
 
 export default function DistilleryPage() {
@@ -13,5 +14,5 @@ export default function DistilleryPage() {
 
 
     if (!testData) return <div>Loading...</div>;
-  return <SummaryDashboard documents={testData.documents} sections={testData.sections} />;
+  return <FhirClientProvider><SummaryDashboard documents={testData.documents} sections={testData.sections} /></FhirClientProvider>;
 }
