@@ -1,42 +1,47 @@
-import React from "react";
+'use client';
+
+import React, { useState, useEffect } from "react";
 import { oauth2 as SMART } from "fhirclient";
 import { FhirClientContext } from "../FhirClientContext";
 
-export default class FhirClientProvider extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            client: null,
-            error: null
-        };
-        this.setClient = client => this.setState({ client });
+const FhirClientProvider = ({ children }) => {
+    const [state, setState] = useState({
+        client: null,
+        error: null
+    });
+
+    const setClient = (client) => {
+        setState(prevState => ({ ...prevState, client }));
+    };
+
+    if (state.error) {
+        return <pre>{state.error.message}</pre>;
     }
 
-    render() {
-        if (this.state.error) {
-            return <pre>{this.state.error.message}</pre>;
-        }
-        return (
-            <FhirClientContext.Provider
-                value={{
-                    client: this.state.client,
-                    setClient: this.setClient
+    return (
+        <FhirClientContext.Provider
+            value={{
+                client: state.client,
+                setClient: setClient
+            }}
+        >
+            <FhirClientContext.Consumer>
+                {({ client }) => {
+                    if (!client) {
+                        SMART.ready()
+                            .then(client => {
+                                setState(prevState => ({ ...prevState, client }));
+                            })
+                            .catch(error => {
+                                setState(prevState => ({ ...prevState, error }));
+                            });
+                        return null;
+                    }
+                    return children;
                 }}
-            >
-                <FhirClientContext.Consumer>
-                    {({ client }) => {
-                        if (!client) {
-                            SMART.ready()
-                                .then(client => {
-                                    this.setState({ client }) }
-                                )
-                                .catch(error => this.setState({ error }));
-                            return null;
-                        }
-                        return this.props.children;
-                    }}
-                </FhirClientContext.Consumer>
-            </FhirClientContext.Provider>
-        );
-    }
-}
+            </FhirClientContext.Consumer>
+        </FhirClientContext.Provider>
+    );
+};
+
+export default FhirClientProvider;
