@@ -1,4 +1,3 @@
-// components/documents/SourceTab.jsx
 "use client";
 import { useState, useEffect } from 'react';
 import { Document, Page } from 'react-pdf';
@@ -6,10 +5,9 @@ import SourceNotification from '@/components/notifications/SourceNotification';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-// Add this utility function at the top of your file
 const getPublicPath = (path) => {
   const basePath = process.env.NODE_ENV === 'production' 
-    ? '/summary-dashboard' // Replace with your repository name
+    ? '/summary-dashboard'
     : '';
   return `${basePath}${path}`;
 };
@@ -33,6 +31,26 @@ const HighlightOverlay = ({ boundingBox, scale = 1 }) => {
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center p-4">
     <div className="w-8 h-8 border-4 border-green-800 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
+const PDFHeader = ({ title, date, author }) => (
+  <div className="bg-gray-50 px-6 py-3 border-b flex items-center justify-between">
+    <h2 className="text-xl font-semibold">{title}</h2>
+    <div className="flex items-center gap-6">
+      <div className="flex items-center gap-2">
+        <svg className="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span className="text-gray-700">{date}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <svg className="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span className="text-gray-700">{author}</span>
+      </div>
+    </div>
   </div>
 );
 
@@ -131,7 +149,6 @@ const SourceTab = ({
     } else {
       setPageNumber(1);
     }
-    setIsLoading(true);
   }, [currentReference]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -176,12 +193,18 @@ const SourceTab = ({
   }
 
   return (
-    <div className="flex flex-col flex-grow min-h-0">
-      <div className="flex-grow overflow-auto p-6" id="pdf-container">
-        {error ? (
-          <div className="text-red-500 text-center">{error}</div>
-        ) : (
-          <div className="relative">
+  <div className="flex flex-col flex-grow min-h-0">
+    <div className="flex-grow overflow-auto p-6" id="pdf-container">
+      {error ? (
+        <div className="text-red-500 text-center">{error}</div>
+      ) : (
+        <div className="border border-gray-200 rounded-lg"> {/* Updated border color to match header */}
+          <PDFHeader 
+            title={currentDocument?.title || "Source name"}
+            date={currentDocument?.date ? new Date(currentDocument.date).toLocaleDateString() : "01/11/2024"}
+            author={currentDocument?.author || "Daniel Ashley"}
+          />
+          <div className="px-6 py-4"> {/* Adjusted padding */}
             {isLoading && <LoadingSpinner />}
             {pdfFile && (
               <Document
@@ -189,7 +212,7 @@ const SourceTab = ({
                 onLoadSuccess={onDocumentLoadSuccess}
                 onLoadError={onDocumentLoadError}
                 loading={<LoadingSpinner />}
-                className="max-w-full"
+                className="flex justify-center" // Center the document
               >
                 <Page
                   pageNumber={pageNumber}
@@ -198,8 +221,8 @@ const SourceTab = ({
                   loading={<LoadingSpinner />}
                   scale={scale}
                   className="shadow-lg"
+                  // Add a wrapper div if needed for more precise control
                 >
-                  {/* Only show highlights for the current page */}
                   {getHighlightsForPage(pageNumber).map((box, index) => (
                     <HighlightOverlay
                       key={index}
@@ -211,11 +234,12 @@ const SourceTab = ({
               </Document>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
 
       <div className="flex-shrink-0 border-t bg-white">
-        <div className="flex items-center justify-center gap-4 p-2">
+        {/* <div className="flex items-center justify-center gap-4 p-2">
           <button
             onClick={() => setPageNumber(prev => Math.max(1, prev - 1))}
             disabled={pageNumber <= 1 || isLoading}
@@ -235,19 +259,19 @@ const SourceTab = ({
           >
             Next Page
           </button>
-        </div>
+        </div> */}
 
-        <div className="p-4">
-          {selectedItem && selectedItem.references?.length > 0 && (
-            <SourceNotification
-              message={`Reference ${activeReferenceIndex + 1} of ${selectedItem.references.length}`}
-              onClose={onClearSelection}
-              onPrevious={onPreviousReference}
-              onNext={onNextReference}
-              showNavigation={selectedItem.references.length > 1}
-            />
+{selectedItem && selectedItem.references?.length > 0 && (
+            <div className="sticky top-6 z-10 flex justify-center mb-4">
+              <SourceNotification
+                message={`Reference ${activeReferenceIndex + 1} of ${selectedItem.references.length}`}
+                onClose={onClearSelection}
+                onPrevious={onPreviousReference}
+                onNext={onNextReference}
+                showNavigation={selectedItem.references.length > 1}
+              />
+            </div>
           )}
-        </div>
       </div>
     </div>
   );
