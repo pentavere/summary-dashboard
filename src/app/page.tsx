@@ -1,12 +1,14 @@
 import SummaryDashboard from '@/components/pages/summary-dashboard'
+import { BrowserRouter, Route } from "react-router-dom";
+import Launcher from "../components/Launcher";
 
 const sections = [
   {
     name: 'Problems',
     key: 'problems',
     items: [
-      { 
-        value: "Type 2 Diabetes", 
+      {
+        value: "Type 2 Diabetes",
         references: [
           {
             doc_id: 0,
@@ -40,8 +42,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Hypertension", 
+      {
+        value: "Hypertension",
         references: [
           {
             doc_id: 0,
@@ -75,8 +77,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Obesity", 
+      {
+        value: "Obesity",
         references: [
           {
             doc_id: 1,
@@ -110,8 +112,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Chronic Kidney Disease", 
+      {
+        value: "Chronic Kidney Disease",
         references: [
           {
             doc_id: 2,
@@ -151,8 +153,8 @@ const sections = [
     name: 'Medications',
     key: 'medications',
     items: [
-      { 
-        value: "Metformin 1000mg", 
+      {
+        value: "Metformin 1000mg",
         references: [
           {
             doc_id: 0,
@@ -186,8 +188,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Lisinopril 10mg", 
+      {
+        value: "Lisinopril 10mg",
         references: [
           {
             doc_id: 0,
@@ -221,8 +223,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Atorvastatin 40mg", 
+      {
+        value: "Atorvastatin 40mg",
         references: [
           {
             doc_id: 1,
@@ -262,8 +264,8 @@ const sections = [
     name: 'Allergies',
     key: 'allergies',
     items: [
-      { 
-        value: "Penicillin", 
+      {
+        value: "Penicillin",
         references: [
           {
             doc_id: 0,
@@ -297,8 +299,8 @@ const sections = [
           }
         ]
       },
-      { 
-        value: "Sulfa Drugs", 
+      {
+        value: "Sulfa Drugs",
         references: [
           {
             doc_id: 1,
@@ -398,7 +400,13 @@ const documents = [
 export default function Home() {
   return (
     <main>
-      <SummaryDashboard documents={documents} sections={sections}  />
+      <BrowserRouter>
+        <Route path="/distillery" >
+          <SummaryDashboard documents={documents} sections={sections} />        
+        </Route>
+        <Route path="/" component={Launcher} exact />
+        <Route path="/launcher/:app" component={Launcher} />
+      </BrowserRouter>
     </main>
   )
 }
