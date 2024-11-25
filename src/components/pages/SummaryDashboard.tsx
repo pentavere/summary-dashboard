@@ -1,6 +1,6 @@
 // pages/SummaryDashboard.jsx
 "use client";
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
 import { Card } from '@/components/ui/card';
 import PatientHeader from '@/components/PatientHeader';
 import SummarySection from '@/components/summary/SummarySection';
