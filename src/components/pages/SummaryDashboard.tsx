@@ -1,9 +1,9 @@
-// pages/SummaryDashboard.jsx
+// pages/SummaryDashboard.tsx
 "use client";
 import React, { useState, createRef } from 'react';
 import { Card } from '@/components/ui/card';
 import PatientHeader from '@/components/PatientHeader';
-import SummarySection from '@/components/summary/SummarySection';
+import Summary from '@/components/summary/Summary';
 import ProcessedDocumentsTab from '@/components/documents/ProcessedDocumentsTab';
 import SourceTab from '@/components/documents/SourceTab';
 
@@ -70,7 +70,7 @@ const SummaryDashboard = ({ documents, sections }) => {
 
           <div className="flex gap-6 flex-1">
             <div className="w-[640px]">
-              <SummarySection
+              <Summary
                 sections={sections}
                 expandedSections={expandedSections}
                 selectedItem={selectedItem}
@@ -80,7 +80,7 @@ const SummaryDashboard = ({ documents, sections }) => {
             </div>
 
             <div className="w-[900px]">
-              <Card className="h-[calc(100vh-200px)] flex flex-col">
+              <Card className="h-[calc(100vh-200px)] flex flex-col rounded-xl overflow-hidden">
                 <div className="border-b flex-shrink-0">
                   <div className="flex">
                     <button

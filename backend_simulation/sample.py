@@ -18,7 +18,7 @@ SAMPLE_RESPONSE = {
               }]
             },
             {
-              "doc_id": 1,
+              "doc_id": 3,
               "page": 1,
               "boundingBoxes": [{
                 "x": 95,
@@ -78,8 +78,8 @@ SAMPLE_RESPONSE = {
           "value": "Obesity",
           "references": [
             {
-              "doc_id": 1,
-              "page": 2,
+              "doc_id": 2,
+              "page": 1,
               "boundingBoxes": [{
                 "x": 110,
                 "y": 180,
@@ -225,7 +225,7 @@ SAMPLE_RESPONSE = {
           "references": [
             {
               "doc_id": 1,
-              "page": 2,
+              "page": 1,
               "boundingBoxes": [{
                 "x": 120,
                 "y": 255,

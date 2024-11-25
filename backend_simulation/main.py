@@ -79,10 +79,10 @@ async def ws_distill(
         if await get_user_from_token(token) is not None:
             while True:
                 data = await websocket.receive_json()
-                for id, _ in enumerate(data["rows"]):
+                for i, _ in enumerate(data["rows"]):
                     # Fake delay
                     time.sleep(1)
-                    await websocket.send_json({"progress": (id + 1) / len(data["rows"])})
+                    await websocket.send_json({"progress": (i + 1) / len(data["rows"])})
                 res = SAMPLE_RESPONSE
                 await websocket.send_json(res)
         else:

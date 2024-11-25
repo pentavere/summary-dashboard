@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { ThumbsUp, ThumbsDown, Menu } from 'lucide-react';
 
-const SummarySection = ({ 
+const Summary = ({ 
   sections, 
   expandedSections, 
   selectedItem,
@@ -85,4 +85,4 @@ const SummarySection = ({
   );
 };
 
-export default SummarySection;
+export default Summary;
