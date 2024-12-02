@@ -1,6 +1,7 @@
-// components/documents/ProcessedDocumentsTab.jsx
+"use client";
 import { Button } from '@/components/ui/button';
 import ProcessedNotification from '@/components/notifications/ProcessedNotification';
+import { useRouter } from 'next/navigation';
 
 const ProcessedDocumentsTab = ({
   documents,
@@ -9,6 +10,8 @@ const ProcessedDocumentsTab = ({
   onDocumentClick,
   onClearSelection
 }) => {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-grow overflow-auto p-4">
@@ -58,6 +61,7 @@ const ProcessedDocumentsTab = ({
           <Button 
             variant="outline" 
             className="text-green-800 border-green-800 hover:bg-green-50"
+            onClick={() => router.push('/modify-documents')}
           >
             Modify Documents
           </Button>

@@ -10,9 +10,11 @@
     "deploy": "next build && touch out/.nojekyll && git add out/ && git commit -m \"Deploy\" && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
+    "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "fhirclient": "^2.3.10",
     "lucide-react": "^0.460.0",
     "next": "15.0.3",
     "npm": "^10.9.0",
@@ -20,10 +22,10 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pdf": "^7.5.1",
-    "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7",
     "react-router-dom": "^5.2.0",
-    "fhirclient": "^2.3.10"
+    "react-use-websocket": "^3.0.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
